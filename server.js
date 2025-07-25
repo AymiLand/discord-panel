@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 let client;
 let guild;
@@ -214,4 +214,6 @@ app.post('/api/raids/update', (req, res) => {
   res.json({ status: 'ok', raids: raidCounts });
 });
 
-app.listen(PORT, () => console.log(`✅ Server uruchomiony na http://localhost:${PORT}`));
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
