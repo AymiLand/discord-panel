@@ -214,6 +214,4 @@ app.post('/api/raids/update', (req, res) => {
   res.json({ status: 'ok', raids: raidCounts });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+app.listen(PORT, () => console.log(`✅ Server uruchomiony na http://localhost:${PORT}`));
