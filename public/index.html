@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rosso Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body{
+  font-family:'Poppins',sans-serif;
+  background:#0c0c0c;
+  color:#f5f5f5;
+  margin:0;
+  padding:0;
+}
+h1,h3{color:#ff3c3c;}
+.container{max-width:1200px;margin:auto;padding:20px;}
+.login-container{
+  display:flex;justify-content:center;align-items:center;min-height:100vh;
+  background:linear-gradient(135deg,#1a0000,#000000);
+}
+.login-card{
+  background:#111;
+  border:2px solid #a00;
+  border-radius:20px;
+  padding:40px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(255,60,60,0.6);
+}
+.login-card h1{color:#ff3c3c;margin-bottom:15px;}
+.discord-btn{
+  background:#ff3c3c;color:#fff;font-weight:600;
+  padding:15px 30px;border:none;border-radius:8px;
+  cursor:pointer;transition:.3s;
+  box-shadow:0 0 10px rgba(255,60,60,0.8);
+}
+.discord-btn:hover{background:#ff1a1a;box-shadow:0 0 20px rgba(255,60,60,1);}
+.main-panel{display:none;}
+.header{
+  background:#111;padding:20px;border-radius:10px;
+  border:1px solid #ff3c3c;margin-bottom:20px;
+  box-shadow:0 0 10px rgba(255,60,60,0.5);
+}
+.tabs{
+  display:flex;overflow-x:auto;
+  background:#111;border-radius:10px;
+  border:1px solid #ff3c3c;margin-bottom:20px;
+}
+.tab{
+  flex:1;padding:12px;text-align:center;cursor:pointer;
+  color:#ff3c3c;font-weight:600;transition:.3s;
+}
+.tab.active{background:#ff3c3c;color:#fff;border-radius:8px;}
+.tab:hover:not(.active){background:#330000;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+table{
+  width:100%;border-collapse:collapse;margin-top:10px;
+}
+th,td{
+  padding:10px;border-bottom:1px solid rgba(255,60,60,0.3);
+}
+th{
+  background:#330000;color:#ffbdbd;text-align:left;
+}
+tr:hover td{background:#1a0000;}
+.badge{
+  background:#ff3c3c;color:#fff;padding:3px 6px;border-radius:6px;font-size:12px;
+}
+.btn{
+  background:#ff3c3c;color:#fff;font-weight:600;
+  padding:8px 12px;border:none;border-radius:6px;margin:2px;cursor:pointer;
+  transition:.3s;box-shadow:0 0 8px rgba(255,60,60,0.6);
+}
+.btn:hover{background:#ff1a1a;box-shadow:0 0 15px rgba(255,60,60,1);}
+input[type="text"],input[type="password"]{
+  background:#000;color:#fff;border:1px solid #ff3c3c;padding:8px;border-radius:6px;margin:5px 0;
+}
+input[type="text"]:focus,input[type="password"]:focus{
+  outline:none;box-shadow:0 0 8px rgba(255,60,60,0.6);
+}
+.status-online{color:#00ff7f;}
+.status-offline{color:#ff3c3c;}
+</style>
+</head>
+<body>
+<div class="login-container" id="loginContainer">
+  <div class="login-card">
+    <h1>🔑 Rosso Di Monaco Panel</h1>
+    <p>Witaj w rekrutacji BettersideRP</p>
+    <button class="discord-btn" onclick="login()">Połącz z Discord</button>
+  </div>
+</div>
+
+<div class="main-panel" id="mainPanel">
+  <div class="container">
+    <div class="header"><h1>Rosso Di Monaco | Panel</h1></div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('dashboard',event)">Dashboard</div>
+      <div class="tab" onclick="showTab('raids',event)">Napady</div>
+      <div class="tab" onclick="showTab('voice',event)">Voice</div>
+      <div class="tab" onclick="showTab('settings',event)">Ustawienia</div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="tab-content active" id="dashboard">
+      <h3>👥 Członkowie</h3>
+      <table>
+        <thead><tr><th>Użytkownik</th><th>Status</th><th>Gra</th></tr></thead>
+        <tbody id="membersTable"><tr><td colspan="3">Brak danych</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- RAID LOG -->
+    <div class="tab-content" id="raids">
+      <h3>🛡️ Dziennik Napadów</h3>
+      <table>
+        <thead><tr><th>Użytkownik</th><th>Napady</th><th>Akcja</th></tr></thead>
+        <tbody id="raidsTable"><tr><td colspan="3">Ładowanie...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- VOICE -->
+    <div class="tab-content" id="voice">
+      <h3>🎙️ Aktywność głosowa</h3>
+      <table>
+        <thead><tr><th>Użytkownik</th><th>Czas na kanale</th></tr></thead>
+        <tbody id="voiceTable"><tr><td colspan="2">Brak danych</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="tab-content" id="settings">
+      <h3>⚙️ Ustawienia</h3>
+      <input type="password" id="botToken" placeholder="Token bota">
+      <button class="btn" onclick="saveToken()">💾 Zapisz</button>
+      <br><hr><br>
+      <input type="text" id="statChannel" placeholder="ID kanału na statystyki">
+      <button class="btn" onclick="saveChannel()">📤 Ustaw kanał</button>
+      <div id="alertContainer"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let isConnected=false;
+
+function login(){
+  document.getElementById('loginContainer').style.display='none';
+  document.getElementById('mainPanel').style.display='block';
+}
+
+function showTab(name,e){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+}
+
+function saveToken(){
+  const token=document.getElementById('botToken').value;
+  if(!token){alert('Podaj token');return;}
+  fetch('/api/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})})
+  .then(r=>r.json()).then(d=>{
+    if(d.status==='connected'){isConnected=true;loadData();setInterval(loadData,30000);}
+    else alert(d.message||'Błąd połączenia');
+  });
+}
+
+function saveChannel(){
+  const channelId=document.getElementById('statChannel').value;
+  if(!channelId){alert('Podaj ID kanału');return;}
+  fetch('/api/set-channel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({channelId})})
+  .then(r=>r.json()).then(d=>alert(d.message));
+}
+
+function loadData(){
+  fetch('/api/data').then(r=>r.json()).then(data=>{
+    // Członkowie
+    document.getElementById('membersTable').innerHTML =
+      data.members.map(m=>`
+        <tr>
+          <td>${m.username}</td>
+          <td class="${m.status==='online'?'status-online':'status-offline'}">${m.status}</td>
+          <td>${m.activity||'-'}</td>
+        </tr>`).join('');
+    // Napady
+    document.getElementById('raidsTable').innerHTML =
+      data.members.map(m=>{
+        const count = data.raids.find(r=>r.username===m.username)?.count || 0;
+        return `
+          <tr>
+            <td>${m.username}</td>
+            <td>${count}</td>
+            <td>
+              <button class="btn" onclick="updateRaidUser('${m.username}','add')">➕</button>
+              <button class="btn" onclick="updateRaidUser('${m.username}','remove')">➖</button>
+            </td>
+          </tr>`;
+      }).join('');
+    // Voice
+    document.getElementById('voiceTable').innerHTML =
+      data.voiceActivity.length ?
+      data.voiceActivity.map(v=>`<tr><td>${v.username}</td><td>${v.formatted}</td></tr>`).join('') :
+      `<tr><td colspan="2">Brak danych</td></tr>`;
+  });
+}
+
+function updateRaidUser(user,action){
+  fetch('/api/raids/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:user,action})})
+    .then(()=>loadData());
+}
+</script>
+</body>
+</html>
